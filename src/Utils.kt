@@ -52,6 +52,7 @@ data class Point(val x: Int, val y: Int) {
     fun rotate(degrees: Int): Point = rotate(degrees * (Math.PI / 180.0))
 
     fun neighborsHv(): List<Point> = NEIGHBORS_HV.map { Point(it.x + this.x, it.y + this.y) }
+    fun neighbors(): List<Point> = NEIGHBORS.map { Point(it.x + this.x, it.y + this.y) }
 
     fun down(amount: Int = 1): Point = copy(y = y + amount)
     fun up(amount: Int = 1): Point = copy(y = y - amount)
@@ -68,6 +69,10 @@ data class Point(val x: Int, val y: Int) {
         val NEIGHBORS_H: List<Point> = listOf(Point(-1, 0), Point(1, 0))
         val NEIGHBORS_V: List<Point> = listOf(Point(0, -1), Point(0, 1))
         val NEIGHBORS_HV: List<Point> = NEIGHBORS_H + NEIGHBORS_V
+
+        val NEIGHBORS: List<Point> = (-1..1)
+            .flatMap { x -> (-1..1).map { y -> Point(x, y) } }
+            .filterNot { it.x == 0 && it.y == 0 }
 
     }
 
