@@ -210,3 +210,26 @@ fun binToDec(bin: String): Long {
 fun Collection<String>.rotateStrings(): List<String> {
     return this.flatMap { it.withIndex() }.groupBy({ (i, _) -> i }, { (_, v) -> v }).map { (_, v) -> v.reversed().joinToString("") }
 }
+
+/**
+ *   Groups consecutive elements in a list.
+ */
+fun <T> Iterable<T>.groupConsecutiveBy(keepFirstElement: Boolean = true, shouldCreateNewGroup: (Int, T) -> Boolean): List<List<T>> =
+    if (!this.any()) {
+        emptyList()
+    } else {
+        val start = mutableListOf(mutableListOf(this.first()))
+        this.drop(1).foldIndexed(start) { index, groups, value ->
+            if (shouldCreateNewGroup(index + 1, value)) {
+                if (keepFirstElement) {
+                    groups.add(mutableListOf(value))
+                } else {
+                    groups.add(mutableListOf())
+                }
+            } else {
+                groups.last().add(value)
+            }
+
+            groups
+        }
+    }
